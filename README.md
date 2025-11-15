@@ -57,20 +57,4 @@ El modelado define las relaciones fundamentales que guiarán las estructuras de 
 
 ---
 
-## 🚀 Guía de Instalación (Próximas Fases)
-
-1.  **Clonar el repositorio:**
-    ```bash
-    git clone [https://github.com/](https://github.com/)[TuUsuario]/streaming-management-system.git
-    cd streaming-management-system
-    ```
-2.  **Inicializar Módulos de Go:**
-    ```bash
-    go mod tidy
-    ```
-3.  **Ejecutar el Core:**
-    ```bash
-    go run cmd/main.go
-    ```
-
 
