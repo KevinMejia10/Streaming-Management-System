@@ -4,16 +4,16 @@
 
 | Fase Actual | Estado | Descripción |
 | :--- | :--- | :--- |
-| **Planeación (Etapa 1)** | ✅ **COMPLETADA** | Se han definido el objetivo, módulos, estructura de directorios, entidades clave y dependencias de terceros. |
-| Implementación (Etapa 2) | ⏸ Pendiente | Desarrollo del código en Go, implementando la lógica funcional y la conexión a la base de datos. |
+| **Planeación (Etapa 1)** | ✅ **COMPLETADA**   | Se han definido el objetivo, módulos, estructura de directorios, entidades clave y dependencias de terceros. |
+| Implementación (Etapa 2) | ⏸ Pendiente   | Desarrollo del código en Go, implementando la lógica funcional y la conexión a la base de datos. |
 
 ---
 
 ## 📌 1. Introducción
 
-Este repositorio contiene el sistema de gestión central (*backend/core*) para una plataforma de distribución de contenido multimedia bajo demanda (Video on Demand, VoD).
+Proyecto backend desarrollado en **Go (Golang)** con **MySQL**, siguiendo una arquitectura modular y escalable.
 
-El proyecto se enmarca en un ejercicio de diseño de software, donde la planeación arquitectónica se basa en un **modelado de entidades de POO (Diagrama de Clases)**, mientras que la implementación futura se realizará bajo el paradigma de **Programación Funcional** utilizando el lenguaje **Go**. Este enfoque dual busca un diseño estructurado y una implementación orientada al rendimiento y la escalabilidad.
+Este documento presenta la arquitectura, módulos, funcionalidades, tecnologías y alcance del proyecto para construir un sistema similar a Netflix o Disney+.
 
 ---
 ## 🚀 1. Objetivo del Proyecto
@@ -65,7 +65,6 @@ El sistema se divide en cuatro módulos principales:
 ### 3.3 Gestión de Suscripciones y Pagos
 - Elección de planes de suscripción.
 - Integración con PayPal.
-- Integración con pagos con tarjeta (Stripe u otra pasarela).
 - Renovación automática.
 - Control del estado de suscripción (activa, vencida, en pago).
 
@@ -127,7 +126,6 @@ Se eligió Go por:
 - `github.com/golang-jwt/jwt/v5` – Tokens JWT.
 - `github.com/spf13/viper` – Variables de entorno y configuración.
 - SDK de PayPal.
-- SDK de Stripe (si se usa para tarjetas).
 
 ---
 
