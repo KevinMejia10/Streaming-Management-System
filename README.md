@@ -14,7 +14,7 @@ Proyecto backend desarrollado en **Go (Golang)** con **MySQL**, siguiendo una ar
 Este documento presenta la arquitectura, módulos, funcionalidades, tecnologías y alcance del proyecto para construir un sistema similar a Netflix o Disney+.
 
 ---
-## 🚀 1. Objetivo del Proyecto
+## 🚀 2. Objetivo del Proyecto
 
 Diseñar y desarrollar un backend robusto para una plataforma de streaming que permita:
 
@@ -25,7 +25,7 @@ Diseñar y desarrollar un backend robusto para una plataforma de streaming que p
 - Integración con métodos de pago (PayPal, tarjetas).
 
 ---
-## 📌 2. Alcance del Sistema
+## 📌 3. Alcance del Sistema
 
 ### ✔ Incluye
 - Backend en Go con arquitectura modular.
@@ -43,7 +43,7 @@ Diseñar y desarrollar un backend robusto para una plataforma de streaming que p
 - Recomendaciones avanzadas.
 
 ---
-# 🧩 3. Arquitectura del Sistema
+## 🧩 4. Arquitectura del Sistema
 
 El sistema se divide en cuatro módulos principales:
 
@@ -72,7 +72,7 @@ El sistema se divide en cuatro módulos principales:
 - Historial únicamente asociado al perfil que reproduce.
 
 ---
-## 🏗 4. Estructura de Funcionalidades por Módulo
+## 🏗 5. Estructura de Funcionalidades por Módulo
 
 ### 📁 Módulo: User/Auth
 - Registro de usuario.
@@ -102,7 +102,7 @@ El sistema se divide en cuatro módulos principales:
 - Indicadores de visualización reciente.
 
 ---
-## 💻 5. Tecnologías Utilizadas
+## 💻 6. Tecnologías Utilizadas
 
 ### Backend – Go (Golang)
 Se eligió Go por:
@@ -127,7 +127,7 @@ Se eligió Go por:
 
 ---
 
-## 🗄️ 6. Base de Datos – MySQL
+## 🗄️ 7. Base de Datos – MySQL
 
 MySQL es la base elegida por:
 - Escalabilidad.
@@ -137,7 +137,7 @@ MySQL es la base elegida por:
 
 ---
 
-## 📚 7. Diagrama de Entidades Clave (Modelado POO)
+## 📚 8. Diagrama de Entidades Clave (Modelado POO)
 
 El modelado define las relaciones fundamentales que guiarán las estructuras de datos en Go:
 
