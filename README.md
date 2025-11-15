@@ -4,7 +4,7 @@
 
 | Fase Actual | Estado | Descripción |
 | :--- | :--- | :--- |
-| **Planeación (Etapa 1)** | ✅ `COMPLETADA` | Se han definido el objetivo, módulos, estructura de directorios, entidades clave y dependencias de terceros. |
+| **Planeación (Etapa 1)** | ✅ Completada | Se han definido el objetivo, módulos, estructura de directorios, entidades clave y dependencias de terceros. |
 | Implementación (Etapa 2) | ⏸ Pendiente | Desarrollo del código en Go, implementando la lógica funcional y la conexión a la base de datos. |
 
 ## 📌 1. Introducción
