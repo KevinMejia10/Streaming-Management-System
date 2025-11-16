@@ -11,7 +11,7 @@
 
 Proyecto backend desarrollado en **Go (Golang)** con **MySQL**, siguiendo una arquitectura modular y escalable.
 
-Este documento presenta la arquitectura, módulos, funcionalidades, tecnologías y alcance del proyecto para construir un sistema similar a Netflix o Disney+..
+Este documento presenta la arquitectura, módulos, funcionalidades, tecnologías y alcance del proyecto para construir un sistema similar a Netflix o Disney+.
 
 ---
 ## 🚀 2. Objetivo del Proyecto
