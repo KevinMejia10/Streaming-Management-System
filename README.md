@@ -137,11 +137,7 @@ MySQL es la base elegida por:
 
 ---
 
-## 📚 8. Diagrama de Entidades Clave (Modelado POO)
-
-El modelado define las relaciones fundamentales que guiarán las estructuras de datos en Go:
-
-* **Entidades Centrales:** `Usuario`, `Suscripción`, `Contenido`, `Historial`, `Transacción`.
+## 📚 8. Diagrama de Clases
 
 ![Diagrama de clases - Streaming](https://github.com/user-attachments/assets/8a547339-b2ba-4fce-8a68-d5ee16aae42a)
 
