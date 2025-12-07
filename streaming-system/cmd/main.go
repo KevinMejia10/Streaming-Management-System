@@ -8,7 +8,6 @@ import (
 	"streaming-system/pkg/auth"
 	"streaming-system/pkg/billing"
 	"streaming-system/pkg/content"
-	"streaming-system/pkg/playback"
 	"strings"
 )
 
@@ -18,6 +17,9 @@ var usuarios map[string]*auth.Usuario // Clave: Correo
 var planesDisponibles map[string]*billing.Plan
 var usuarioActual *auth.Usuario
 var perfilActual *auth.Perfil
+
+// Constante para simular el correo del administrador (Control de Acceso)
+const CorreoAdmin = "admin@stream.com"
 
 func main() {
 	fmt.Println("=========================================")
@@ -47,6 +49,10 @@ func inicializarDatosMock() {
 		"1": billing.NuevoPlan("P01", "Básico", 9.99, 9.99),
 		"2": billing.NuevoPlan("P02", "Premium", 19.99, 19.99),
 	}
+
+	// 3. Crear el usuario administrador para pruebas
+	adminUser := auth.NuevoUsuario("U0", "Admin Master", CorreoAdmin, "secure_admin_pass")
+	usuarios[CorreoAdmin] = adminUser
 }
 
 // LeerEntrada lee una línea del terminal.
@@ -56,7 +62,12 @@ func leerEntrada() string {
 	return strings.TrimSpace(input)
 }
 
-// Menu Principal
+// EsAdmin verifica si el usuario logueado es el administrador.
+func EsAdmin(u *auth.Usuario) bool {
+	return u != nil && u.GetID() == "U0"
+}
+
+// Menu Principal (MODIFICADO: Opción de Administración en menú desconectado)
 func menuPrincipal() {
 	for {
 		fmt.Println("\n--- MENÚ PRINCIPAL ---")
@@ -64,6 +75,7 @@ func menuPrincipal() {
 			fmt.Println("1. Registrar nuevo usuario")
 			fmt.Println("2. Iniciar Sesión")
 			fmt.Println("3. Salir")
+			fmt.Println("A. Módulo de Administración (Requiere Admin Login)") // OPCIÓN VISIBLE DESCONECTADO
 		} else {
 			fmt.Printf("👤 Conectado como: %s | Perfil: %s\n", usuarioActual.GetID(), func() string {
 				if perfilActual != nil {
@@ -71,16 +83,17 @@ func menuPrincipal() {
 				}
 				return "N/A"
 			}())
+
+			// OPCIONES DE USUARIO ESTÁNDAR
 			fmt.Println("4. Ver Planes y Suscribirse/Pagar")
 			fmt.Println("5. Gestionar Perfiles")
 			fmt.Println("6. Ver Contenido Disponible")
-			fmt.Println("7. Simular Reproducción")
-			fmt.Println("8. Ver Historial de Reproducción (Perfil)")
+			fmt.Println("7. Ver Historial de Reproducción (Perfil)")
 			fmt.Println("9. Cerrar Sesión")
 		}
 
 		fmt.Print("Elige una opción: ")
-		opcion := leerEntrada()
+		opcion := strings.ToUpper(leerEntrada()) // Convertir a mayúsculas para manejar 'A'
 
 		if usuarioActual == nil {
 			switch opcion {
@@ -91,6 +104,30 @@ func menuPrincipal() {
 			case "3":
 				fmt.Println("👋 ¡Gracias por usar el sistema!")
 				return
+			case "A": // CASO AHORA ACCESIBLE SIN INICIAR SESIÓN
+				// Lógica para forzar la autenticación del administrador antes de entrar al módulo
+				fmt.Println("\n--- ACCESO DE ADMINISTRADOR ---")
+				fmt.Print("Correo Admin: ")
+				correo := leerEntrada()
+				fmt.Print("Contraseña Admin: ")
+				contrasenia := leerEntrada()
+
+				user, ok := usuarios[correo]
+				if !ok || user.GetID() != "U0" {
+					fmt.Println("❌ Acceso denegado: Credenciales o privilegios inválidos.")
+					return
+				}
+				err := user.IniciarSesion(correo, contrasenia)
+				if err != nil {
+					fmt.Println("❌ Acceso denegado:", err)
+					return
+				}
+				// Si la autenticación es exitosa, se abre el menú de administración
+				fmt.Println("✅ Autenticación de Administrador Exitosa.")
+				menuAdministracion()
+				// Tras salir de menuAdministracion(), el usuario debe cerrar sesión
+				user.CerrarSesion()
+
 			default:
 				fmt.Println("Opción no válida.")
 			}
@@ -103,8 +140,6 @@ func menuPrincipal() {
 			case "6":
 				verContenidoDisponible()
 			case "7":
-				simularReproduccion()
-			case "8":
 				verHistorialReproduccion()
 			case "9":
 				usuarioActual.CerrarSesion()
@@ -133,7 +168,15 @@ func simularRegistro() {
 		return
 	}
 
-	nuevoUsuario := auth.NuevoUsuario(fmt.Sprintf("U%d", len(usuarios)+1), nombre, correo, contrasenia)
+	// Si el correo es el de admin, se le asigna el ID fijo U0, sino se asigna un nuevo ID incremental
+	var id string
+	if correo == CorreoAdmin {
+		id = "U0"
+	} else {
+		id = fmt.Sprintf("U%d", len(usuarios)+1)
+	}
+
+	nuevoUsuario := auth.NuevoUsuario(id, nombre, correo, contrasenia)
 	usuarios[correo] = nuevoUsuario
 	fmt.Println("✅ Usuario registrado con éxito. Ahora puede iniciar sesión.")
 }
@@ -252,16 +295,12 @@ func simularGestionPerfiles() {
 	}
 }
 
-// 4. Módulo B: Ver Contenido
+// 4. Módulo B: Ver Contenido (Usado para ver el catálogo)
 func verContenidoDisponible() {
 	fmt.Println("\n--- CONTENIDO DISPONIBLE ---")
-	if !usuarioActual.TieneSuscripcionActiva() {
+	// La restricción de suscripción solo se aplica si el usuario no es admin
+	if usuarioActual == nil || (!EsAdmin(usuarioActual) && !usuarioActual.TieneSuscripcionActiva()) {
 		fmt.Println("❌ **AUTORIZACIÓN REQUERIDA**: Necesita una suscripción activa para ver el contenido.")
-		return
-	}
-
-	if perfilActual == nil {
-		fmt.Println("⚠️ Necesita elegir un perfil activo (Opción 5) antes de ver contenido.")
 		return
 	}
 
@@ -277,56 +316,106 @@ func verContenidoDisponible() {
 	}
 }
 
-// 5. Módulo D: Simular Reproducción y Progreso
-func simularReproduccion() {
-	if !usuarioActual.TieneSuscripcionActiva() {
-		fmt.Println("❌ **AUTORIZACIÓN REQUERIDA**: Necesita una suscripción activa para reproducir.")
-		return
-	}
-	if perfilActual == nil {
-		fmt.Println("⚠️ Necesita elegir un perfil activo (Opción 5) antes de reproducir contenido.")
-		return
-	}
-	verContenidoDisponible() // Mostrar el listado
+// 5. Módulo de Administración
+func menuAdministracion() {
+	for {
+		fmt.Println("\n--- MÓDULO DE ADMINISTRACIÓN (CRUD) ---")
+		fmt.Println("1. Ver Contenido (Leer)")
+		fmt.Println("2. Agregar Nuevo Contenido (Crear)")
+		fmt.Println("3. Modificar Título (Actualizar)")
+		fmt.Println("4. Eliminar Contenido (Eliminar)")
+		fmt.Println("5. Volver al Menú Principal")
 
-	fmt.Print("\nID del Contenido a reproducir (ej. C001, C002): ")
-	contenidoID := leerEntrada()
+		fmt.Print("Elige una opción: ")
+		opcion := leerEntrada()
 
-	c, err := gestor.BuscarContenido(contenidoID)
-	if err != nil {
-		fmt.Println("❌", err)
-		return
-	}
-
-	// 1. Iniciar/Reanudar Reproducción
-	historial := usuarioActual.GetHistorialReproduccion()
-	vis := historial.ObtenerUltimaVisualizacionPorContenido(contenidoID)
-
-	if vis == nil {
-		// Nuevo inicio de visualización
-		vis = playback.NuevoVisualizacion(fmt.Sprintf("V%s-%d", perfilActual.GetID(), len(historial.GetVisualizaciones())+1), c)
-		vis.GetContenido().Reproducir()
-	} else {
-		// Reanudar visualización
-		vis.ReproducirDesdePunto()
-	}
-
-	// 2. Simular guardar progreso
-	fmt.Print("Simular interrupción. ¿Guardar progreso en el minuto? (0-100): ")
-	progresoStr := leerEntrada()
-	progreso, _ := strconv.Atoi(progresoStr)
-
-	if progreso > 0 {
-		// CORRECCIÓN: Usar el método público GuardarProgreso()
-		vis.GuardarProgreso(progreso)
-		historial.AgregarVisualizacion(vis)
-		fmt.Println("✅ Visualización registrada en el historial del perfil", perfilActual.GetNombre())
-	} else {
-		fmt.Println("⏭️ No se guardó progreso. Reproducción terminada/descartada.")
+		switch opcion {
+		case "1":
+			// No necesita suscripción para ver el catálogo desde el panel de admin
+			verContenidoDisponible()
+		case "2":
+			agregarContenido()
+		case "3":
+			modificarContenido()
+		case "4":
+			eliminarContenido()
+		case "5":
+			return
+		default:
+			fmt.Println("Opción no válida.")
+		}
 	}
 }
 
-// 6. Módulo D: Ver Historial
+func agregarContenido() {
+	fmt.Println("\n--- AGREGAR CONTENIDO ---")
+	fmt.Print("Tipo (P: Película, S: Serie): ")
+	tipo := strings.ToUpper(leerEntrada())
+	fmt.Print("ID (ej. C003): ")
+	id := leerEntrada()
+	fmt.Print("Título: ")
+	titulo := leerEntrada()
+	fmt.Print("Descripción: ")
+	descripcion := leerEntrada()
+	fmt.Print("Género: ")
+	genero := leerEntrada()
+
+	if tipo == "P" {
+		// Película
+		fmt.Print("Director: ")
+		director := leerEntrada()
+		fmt.Print("Duración (min): ")
+		duracionStr := leerEntrada()
+
+		// --- CORRECCIÓN FLOAT64 A FLOAT32 ---
+		duracion64, _ := strconv.ParseFloat(duracionStr, 64)
+		duracion32 := float32(duracion64) // Conversión explícita
+
+		nuevaPeli := content.NuevaPelicula(id, titulo, descripcion, genero, director, "N/A", duracion32)
+		gestor.InsertarContenido(nuevaPeli)
+		fmt.Printf("✅ Película '%s' agregada.\n", titulo)
+	} else if tipo == "S" {
+		// Serie
+		fmt.Print("Temporadas: ")
+		temporadasStr := leerEntrada()
+		temporadas, _ := strconv.Atoi(temporadasStr)
+
+		nuevaSerie := content.NuevaSerie(id, titulo, descripcion, genero, temporadas)
+		gestor.InsertarContenido(nuevaSerie)
+		fmt.Printf("✅ Serie '%s' agregada. Añade episodios a través de la interfaz de desarrollo.\n", titulo)
+	} else {
+		fmt.Println("❌ Tipo de contenido no reconocido.")
+	}
+}
+
+func modificarContenido() {
+	fmt.Println("\n--- MODIFICAR TÍTULO ---")
+	verContenidoDisponible()
+	fmt.Print("ID del Contenido a modificar: ")
+	id := leerEntrada()
+
+	fmt.Print("Nuevo Título: ")
+	nuevoTitulo := leerEntrada()
+
+	err := gestor.ActualizarContenidoMetadata(id, nuevoTitulo)
+	if err != nil {
+		fmt.Println("❌ Error al modificar:", err)
+	} else {
+		fmt.Printf("✅ Título del contenido %s actualizado a '%s'.\n", id, nuevoTitulo)
+	}
+}
+
+func eliminarContenido() {
+	fmt.Println("\n--- ELIMINAR CONTENIDO ---")
+	verContenidoDisponible()
+	fmt.Print("ID del Contenido a eliminar: ")
+	id := leerEntrada()
+
+	gestor.BorrarContenido(id)
+	fmt.Printf("✅ Contenido %s eliminado del catálogo.\n", id)
+}
+
+// 6. Módulo D: Ver Historial (Ahora es la Opción 7)
 func verHistorialReproduccion() {
 	if perfilActual == nil {
 		fmt.Println("⚠️ Debe elegir un perfil activo (Opción 5) para ver su historial.")
@@ -344,13 +433,12 @@ func verHistorialReproduccion() {
 		titulo := v.GetContenido().GetTitulo()
 		progreso := ""
 
-		// CORRECCIÓN: Usar el método público GetGuardarProgreso()
+		// Usando Getters para cumplir encapsulación
 		if v.GetGuardarProgreso() > 0 {
-			// CORRECCIÓN: Usar el método público GetGuardarProgreso()
 			progreso = fmt.Sprintf(" (Progreso: min %d)", v.GetGuardarProgreso())
 		}
 
-		// CORRECCIÓN: Usar el método público GetFecha()
+		// Usando Getters para cumplir encapsulación
 		fmt.Printf("• %s | %s%s\n", titulo, v.GetFecha().Format("02 Jan 15:04"), progreso)
 	}
 }
