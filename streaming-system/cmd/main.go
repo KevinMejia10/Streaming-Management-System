@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-// Globales Mock
+// Variable Mock (Datos simulados en memoria)
 var gestor *content.GestorDeContenido
 var usuarios map[string]*auth.Usuario // Clave: Correo
 var planesDisponibles map[string]*billing.Plan
@@ -23,7 +23,7 @@ const CorreoAdmin = "admin@stream.com"
 
 func main() {
 	fmt.Println("=========================================")
-	fmt.Println("🎬 Sistema de Gestión de Streaming (Go)")
+	fmt.Println(" Sistema de Gestión de Streaming (Go)")
 	fmt.Println("=========================================")
 
 	inicializarDatosMock()
@@ -62,12 +62,12 @@ func leerEntrada() string {
 	return strings.TrimSpace(input)
 }
 
-// EsAdmin verifica si el usuario logueado es el administrador.
+// Verifica si el usuario logueado es el administrador.
 func EsAdmin(u *auth.Usuario) bool {
 	return u != nil && u.GetID() == "U0"
 }
 
-// Menu Principal (MODIFICADO: Opción de Administración en menú desconectado)
+// Menu Principal
 func menuPrincipal() {
 	for {
 		fmt.Println("\n--- MENÚ PRINCIPAL ---")
@@ -77,7 +77,7 @@ func menuPrincipal() {
 			fmt.Println("3. Salir")
 			fmt.Println("A. Módulo de Administración (Requiere Admin Login)") // OPCIÓN VISIBLE DESCONECTADO
 		} else {
-			fmt.Printf("👤 Conectado como: %s | Perfil: %s\n", usuarioActual.GetID(), func() string {
+			fmt.Printf("Conectado como: %s | Perfil: %s\n", usuarioActual.GetID(), func() string {
 				if perfilActual != nil {
 					return perfilActual.GetNombre()
 				}
@@ -102,9 +102,9 @@ func menuPrincipal() {
 			case "2":
 				simularInicioSesion()
 			case "3":
-				fmt.Println("👋 ¡Gracias por usar el sistema!")
+				fmt.Println("¡Gracias por usar el sistema!")
 				return
-			case "A": // CASO AHORA ACCESIBLE SIN INICIAR SESIÓN
+			case "A":
 				// Lógica para forzar la autenticación del administrador antes de entrar al módulo
 				fmt.Println("\n--- ACCESO DE ADMINISTRADOR ---")
 				fmt.Print("Correo Admin: ")
@@ -114,16 +114,16 @@ func menuPrincipal() {
 
 				user, ok := usuarios[correo]
 				if !ok || user.GetID() != "U0" {
-					fmt.Println("❌ Acceso denegado: Credenciales o privilegios inválidos.")
+					fmt.Println("Acceso denegado: Credenciales o privilegios inválidos.")
 					return
 				}
 				err := user.IniciarSesion(correo, contrasenia)
 				if err != nil {
-					fmt.Println("❌ Acceso denegado:", err)
+					fmt.Println("Acceso denegado:", err)
 					return
 				}
 				// Si la autenticación es exitosa, se abre el menú de administración
-				fmt.Println("✅ Autenticación de Administrador Exitosa.")
+				fmt.Println("Autenticación de Administrador Exitosa.")
 				menuAdministracion()
 				// Tras salir de menuAdministracion(), el usuario debe cerrar sesión
 				user.CerrarSesion()
@@ -145,7 +145,7 @@ func menuPrincipal() {
 				usuarioActual.CerrarSesion()
 				usuarioActual = nil
 				perfilActual = nil
-				fmt.Println("✅ Sesión cerrada correctamente.")
+				fmt.Println("Sesión cerrada correctamente.")
 			default:
 				fmt.Println("Opción no válida.")
 			}
@@ -153,7 +153,7 @@ func menuPrincipal() {
 	}
 }
 
-// 1. Módulo A: Registro y Autenticación
+// 1. Módulo Registro y Autenticación
 func simularRegistro() {
 	fmt.Println("\n--- REGISTRO DE USUARIO ---")
 	fmt.Print("Correo (ej. user@test.com): ")
@@ -164,7 +164,7 @@ func simularRegistro() {
 	contrasenia := leerEntrada()
 
 	if _, ok := usuarios[correo]; ok {
-		fmt.Println("❌ Error: Ya existe un usuario con ese correo.")
+		fmt.Println("Error: Ya existe un usuario con ese correo.")
 		return
 	}
 
@@ -178,7 +178,7 @@ func simularRegistro() {
 
 	nuevoUsuario := auth.NuevoUsuario(id, nombre, correo, contrasenia)
 	usuarios[correo] = nuevoUsuario
-	fmt.Println("✅ Usuario registrado con éxito. Ahora puede iniciar sesión.")
+	fmt.Println("Usuario registrado con éxito. Ahora puede iniciar sesión.")
 }
 
 func simularInicioSesion() {
@@ -190,26 +190,26 @@ func simularInicioSesion() {
 
 	user, ok := usuarios[correo]
 	if !ok {
-		fmt.Println("❌ Error:", auth.ErrCredencialesInvalidas)
+		fmt.Println("Error:", auth.ErrCredencialesInvalidas)
 		return
 	}
 
 	err := user.IniciarSesion(correo, contrasenia)
 	if err != nil {
-		fmt.Println("❌ Error:", err)
+		fmt.Println("Error:", err)
 		return
 	}
 	usuarioActual = user
 }
 
-// 2. Módulo C: Suscripción y Pago
+// 2. Módulo Suscripción y Pago
 func simularGestionSuscripcion() {
 	if usuarioActual.TieneSuscripcionActiva() {
-		fmt.Printf("ℹ️ Ya tiene una suscripción **%s** activa. ¿Desea renovarla o cancelarla? (R/C/N): ", usuarioActual.GetSuscripcion().GetPlan().GetNombre())
+		fmt.Printf("ℹ Ya tiene una suscripción **%s** activa. ¿Desea renovarla o cancelarla? (R/C/N): ", usuarioActual.GetSuscripcion().GetPlan().GetNombre())
 		op := strings.ToUpper(leerEntrada())
 		if op == "C" {
 			usuarioActual.GetSuscripcion().Cancelar()
-			fmt.Println("✅ Suscripción cancelada.")
+			fmt.Println(" Suscripción cancelada.")
 			return
 		} else if op != "R" {
 			return
@@ -225,7 +225,7 @@ func simularGestionSuscripcion() {
 	planID := leerEntrada()
 	planElegido, ok := planesDisponibles[planID]
 	if !ok {
-		fmt.Println("❌ Plan no válido.")
+		fmt.Println("Plan no válido.")
 		return
 	}
 
@@ -242,28 +242,28 @@ func simularGestionSuscripcion() {
 	} else if opcionPago == "2" {
 		pagoOpcion = billing.PayPal
 	} else {
-		fmt.Println("❌ Opción de pago no válida. Usando Tarjeta por defecto.")
+		fmt.Println("Opción de pago no válida. Usando Tarjeta por defecto.")
 		pagoOpcion = billing.TarjetaCredito
 	}
 
 	err := pago.RegistrarPago(planElegido.GetPrecio(), pagoOpcion, suscripcion)
 	if err != nil {
-		fmt.Println("❌ Fallo en el pago:", err)
+		fmt.Println("Fallo en el pago:", err)
 		return
 	}
 
 	// Asignar la suscripción al usuario solo si el pago fue exitoso
 	usuarioActual.AsignarSuscripcion(suscripcion)
-	fmt.Println("✅ Suscripción adquirida con éxito.")
+	fmt.Println("Suscripción adquirida con éxito.")
 }
 
-// 3. Módulo A: Gestión de Perfiles
+// 3. Módulo Gestión de Perfiles
 func simularGestionPerfiles() {
 	fmt.Println("\n--- GESTIÓN DE PERFILES ---")
 	perfiles := usuarioActual.GetPerfiles()
 
 	if len(perfiles) == 0 {
-		fmt.Println("ℹ️ No tiene perfiles creados.")
+		fmt.Println("ℹNo tiene perfiles creados.")
 	} else {
 		fmt.Println("Perfiles existentes:")
 		for _, p := range perfiles {
@@ -278,7 +278,7 @@ func simularGestionPerfiles() {
 		fmt.Print("Nombre del nuevo perfil: ")
 		nombre := leerEntrada()
 		nuevo := usuarioActual.CrearPerfil(nombre)
-		fmt.Printf("✅ Perfil '%s' creado con ID %d.\n", nuevo.GetNombre(), nuevo.GetID())
+		fmt.Printf("Perfil '%s' creado con ID %d.\n", nuevo.GetNombre(), nuevo.GetID())
 		perfilActual = nuevo // Asignar automáticamente el nuevo perfil
 	} else if accion == "E" {
 		fmt.Print("ID del perfil a elegir: ")
@@ -287,11 +287,11 @@ func simularGestionPerfiles() {
 		for _, p := range perfiles {
 			if p.GetID() == id {
 				perfilActual = p
-				fmt.Printf("✅ Perfil activo cambiado a: %s\n", p.GetNombre())
+				fmt.Printf("Perfil activo cambiado a: %s\n", p.GetNombre())
 				return
 			}
 		}
-		fmt.Println("❌ ID de perfil no encontrado.")
+		fmt.Println("ID de perfil no encontrado.")
 	}
 }
 
@@ -300,7 +300,7 @@ func verContenidoDisponible() {
 	fmt.Println("\n--- CONTENIDO DISPONIBLE ---")
 	// La restricción de suscripción solo se aplica si el usuario no es admin
 	if usuarioActual == nil || (!EsAdmin(usuarioActual) && !usuarioActual.TieneSuscripcionActiva()) {
-		fmt.Println("❌ **AUTORIZACIÓN REQUERIDA**: Necesita una suscripción activa para ver el contenido.")
+		fmt.Println("**AUTORIZACIÓN REQUERIDA**: Necesita una suscripción activa para ver el contenido.")
 		return
 	}
 
@@ -367,13 +367,12 @@ func agregarContenido() {
 		fmt.Print("Duración (min): ")
 		duracionStr := leerEntrada()
 
-		// --- CORRECCIÓN FLOAT64 A FLOAT32 ---
 		duracion64, _ := strconv.ParseFloat(duracionStr, 64)
 		duracion32 := float32(duracion64) // Conversión explícita
 
 		nuevaPeli := content.NuevaPelicula(id, titulo, descripcion, genero, director, "N/A", duracion32)
 		gestor.InsertarContenido(nuevaPeli)
-		fmt.Printf("✅ Película '%s' agregada.\n", titulo)
+		fmt.Printf("Película '%s' agregada.\n", titulo)
 	} else if tipo == "S" {
 		// Serie
 		fmt.Print("Temporadas: ")
@@ -382,9 +381,9 @@ func agregarContenido() {
 
 		nuevaSerie := content.NuevaSerie(id, titulo, descripcion, genero, temporadas)
 		gestor.InsertarContenido(nuevaSerie)
-		fmt.Printf("✅ Serie '%s' agregada. Añade episodios a través de la interfaz de desarrollo.\n", titulo)
+		fmt.Printf("Serie '%s' agregada. Añade episodios a través de la interfaz de desarrollo.\n", titulo)
 	} else {
-		fmt.Println("❌ Tipo de contenido no reconocido.")
+		fmt.Println("Tipo de contenido no reconocido.")
 	}
 }
 
@@ -399,9 +398,9 @@ func modificarContenido() {
 
 	err := gestor.ActualizarContenidoMetadata(id, nuevoTitulo)
 	if err != nil {
-		fmt.Println("❌ Error al modificar:", err)
+		fmt.Println("Error al modificar:", err)
 	} else {
-		fmt.Printf("✅ Título del contenido %s actualizado a '%s'.\n", id, nuevoTitulo)
+		fmt.Printf("Título del contenido %s actualizado a '%s'.\n", id, nuevoTitulo)
 	}
 }
 
@@ -412,19 +411,19 @@ func eliminarContenido() {
 	id := leerEntrada()
 
 	gestor.BorrarContenido(id)
-	fmt.Printf("✅ Contenido %s eliminado del catálogo.\n", id)
+	fmt.Printf("Contenido %s eliminado del catálogo.\n", id)
 }
 
-// 6. Módulo D: Ver Historial (Ahora es la Opción 7)
+// 6. Módulo Ver Historial
 func verHistorialReproduccion() {
 	if perfilActual == nil {
-		fmt.Println("⚠️ Debe elegir un perfil activo (Opción 5) para ver su historial.")
+		fmt.Println("Debe elegir un perfil activo (Opción 5) para ver su historial.")
 		return
 	}
 
 	historial := usuarioActual.GetHistorialReproduccion()
 	if len(historial.GetVisualizaciones()) == 0 {
-		fmt.Printf("\nℹ️ El perfil **%s** no tiene historial de reproducción.\n", perfilActual.GetNombre())
+		fmt.Printf("\n El perfil **%s** no tiene historial de reproducción.\n", perfilActual.GetNombre())
 		return
 	}
 

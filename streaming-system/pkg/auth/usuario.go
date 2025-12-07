@@ -33,7 +33,7 @@ func NuevoUsuario(id, nombre, correo, contrasenia string) *Usuario {
 
 // hashPassword simula el proceso de hashing de contraseñas.
 func hashPassword(contrasenia string) string {
-	// En un sistema real usaríamos bcrypt. Aquí, solo devolvemos un hash simple.
+
 	return "HASH_" + contrasenia
 }
 

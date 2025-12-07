@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-// GestorDeContenido es el singleton que maneja todo el inventario de contenido.
+// GestorDeContenido que maneja todo el inventario de contenido.
 type GestorDeContenido struct {
 	catalogo map[string]Contenible
 }
