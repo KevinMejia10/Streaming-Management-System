@@ -208,10 +208,20 @@ s, err := storage.NewMySQLStorage(storage.DBConfig{
     DBName:   "BDD_Streaming",
 })
 ```
+## Ejecución del Proyecto
 
+Abre una terminal en la raíz del proyecto y ejecuta los siguientes comandos para inicializar y arrancar el servidor:
 
+```go
+# Inicializar el módulo si no existe
+go mod init streaming-system
 
+# Descargar drivers de MySQL y dependencias
+go mod tidy
 
+# Ejecutar la aplicación
+go run ./cmd/main.go
+```
 
 
 
