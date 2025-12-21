@@ -189,3 +189,36 @@ streaming-system/
 ├── go.mod                 # Dependencias del proyecto
 └── README.md              # Documentación
 
+# 🛠️ Guía Técnica - StreamGo
+
+Este documento detalla los requisitos, la configuración del entorno y los pasos necesarios para ejecutar el sistema de streaming de forma local.
+
+---
+
+## 📋 Requisitos Técnicos
+
+Para ejecutar este proyecto, necesitas tener instalados los siguientes componentes:
+
+1.  **Go (Golang):** Versión 1.18 o superior.
+2.  **MySQL Server:** Versión 8.0 o superior.
+3.  **Git:** Para la gestión del repositorio (opcional).
+4.  **Navegador Web:** Chrome, Firefox o Edge.
+
+---
+
+## 🔧 1. Configuración de la Base de Datos
+
+El sistema utiliza una base de datos MySQL. Sigue estos pasos para prepararla:
+
+1. Crea una base de datos llamada `BDD_Streaming`.
+2. Asegúrate de tener las tablas (`usuarios`, `perfiles`, `contenidos`, `planes_suscripcion`) creadas según el esquema del proyecto.
+3. **Importante:** Ajusta las credenciales de conexión en el archivo `cmd/main.go` dentro de la función `main()`:
+
+```go
+s, err := storage.NewMySQLStorage(storage.DBConfig{
+    User:     "root",             // Tu usuario de MySQL
+    Password: "TU_PASSWORD_AQUÍ", // Tu contraseña de MySQL
+    Host:     "localhost",
+    Port:     "3306",
+    DBName:   "BDD_Streaming",
+})
