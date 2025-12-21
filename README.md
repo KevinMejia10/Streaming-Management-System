@@ -142,3 +142,100 @@ MySQL es la base elegida por:
 ![Diagrama de clases - Streaming](https://github.com/user-attachments/assets/8a547339-b2ba-4fce-8a68-d5ee16aae42a)
 
 
+
+
+# 🎬 StreamGo - Plataforma de Streaming Educativa
+
+**StreamGo** es una aplicación web de streaming de alto rendimiento desarrollada en **Go (Golang)**. El proyecto implementa una arquitectura limpia, persistencia de datos en **MySQL** y una interfaz de usuario moderna y responsiva utilizando **TailwindCSS**. Permite la gestión integral de usuarios, perfiles, planes de suscripción y un catálogo de contenidos mediante un potente módulo administrativo.
+
+---
+
+## 🚀 Características Principales
+
+### 👤 Gestión de Usuarios y Perfiles
+* **Autenticación Completa:** Registro e inicio de sesión seguro para usuarios.
+* **Selección de Perfil:** Pantalla intermedia estilo "Netflix" que permite elegir o crear perfiles personalizados después del login.
+* **Control de Acceso:** Sistema que verifica suscripciones activas antes de permitir el acceso al catálogo.
+
+### 🎬 Experiencia del Usuario (Dashboard)
+* **Visualización Intuitiva:** Catálogo organizado en una grilla moderna con títulos y descripciones siempre visibles para mejorar la navegabilidad.
+* **Diseño Premium:** Estética de "Modo Oscuro" profesional optimizada con TailwindCSS.
+
+### ⚙️ Módulo Administrativo (CRUD Web)
+Interfaz exclusiva para administradores (`admin@stream.com`) que permite la gestión total del inventario sin tocar la base de datos directamente:
+* **Crear:** Formulario dinámico para añadir películas con ID, título y descripción.
+* **Leer:** Tabla de inventario que muestra todo el contenido cargado en MySQL.
+* **Actualizar:** Sistema de edición mediante **ventanas modales** para modificar datos existentes en tiempo real.
+* **Eliminar:** Opción de borrado permanente con confirmación de seguridad.
+
+---
+
+## 🛠️ Tecnologías Utilizadas
+
+| Componente | Tecnología |
+| :--- | :--- |
+| **Backend** | Go (Golang) |
+| **Base de Datos** | MySQL 8.0 |
+| **Frontend** | HTML5, JavaScript (ES6+) |
+| **Estilos** | TailwindCSS (vía CDN) |
+| **Persistencia** | `database/sql` & `go-sql-driver/mysql` |
+
+---
+
+## 📁 Estructura del Proyecto
+
+```text
+streaming-system/
+├── cmd/
+│   └── main.go            # Servidor central y manejadores HTTP
+├── pkg/
+│   ├── auth/              # Lógica de usuarios y perfiles
+│   ├── billing/           # Lógica de planes y pagos
+│   ├── content/           # Modelos de contenido y catálogo
+│   └── storage/           # Capa de persistencia (MySQL)
+├── templates/             # Vistas HTML (Login, Admin, Dashboard, etc.)
+├── go.mod                 # Dependencias del proyecto
+└── README.md              # Documentación
+
+🔧 Configuración e Instalación
+1. Requisitos Previos
+Instalación de Go 1.18 o superior.
+
+Servidor MySQL activo.
+
+2. Configuración de la Base de Datos
+Crea la base de datos llamada BDD_Streaming. Asegúrate de que las tablas coincidan con las estructuras definidas en el paquete storage. Ajusta las credenciales en el archivo cmd/main.go dentro de la función main:
+
+Go
+
+s, err := storage.NewMySQLStorage(storage.DBConfig{
+    User:     "root",
+    Password: "TU_PASSWORD_AQUÍ",
+    Host:     "localhost",
+    Port:     "3306",
+    DBName:   "BDD_Streaming",
+})
+3. Ejecución del Proyecto
+Abre una terminal en la raíz del proyecto y ejecuta los siguientes comandos:
+
+Bash
+
+# Inicializar el módulo si no existe
+go mod init streaming-system
+
+# Descargar drivers de MySQL y dependencias
+go mod tidy
+
+# Ejecutar la aplicación
+go run ./cmd/main.go
+El sistema se iniciará en: http://localhost:8080.
+
+🔒 Acceso Administrativo
+Para gestionar el contenido, inicia sesión con la cuenta de administrador:
+
+Email: admin@stream.com
+
+Password: (La configurada en tu base de datos)
+
+Nota: El sistema detecta automáticamente este correo y redirige al panel /admin.
+
