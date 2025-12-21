@@ -174,21 +174,6 @@ Interfaz exclusiva para administradores (`admin@stream.com`) que permite la gest
 
 ---
 
-## 📁 Estructura del Proyecto
-
-```text
-streaming-system/
-├── cmd/
-│   └── main.go            # Servidor central y manejadores HTTP
-├── pkg/
-│   ├── auth/              # Lógica de usuarios y perfiles
-│   ├── billing/           # Lógica de planes y pagos
-│   ├── content/           # Modelos de contenido y catálogo
-│   └── storage/           # Capa de persistencia (MySQL)
-├── templates/             # Vistas HTML (Login, Admin, Dashboard, etc.)
-├── go.mod                 # Dependencias del proyecto
-└── README.md              # Documentación
-
 # 🛠️ Guía Técnica - StreamGo
 
 Este documento detalla los requisitos, la configuración del entorno y los pasos necesarios para ejecutar el sistema de streaming de forma local.
