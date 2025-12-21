@@ -235,6 +235,8 @@ Password: (La configurada en tu base de datos)
 Nota: El sistema detecta automáticamente este correo y redirige al panel /admin.
 
 ## 📂 Estructura del Proyecto
+
+```go
 streaming-system/
 ├── cmd/
 │   └── main.go            # Servidor central y ruteo
@@ -245,7 +247,7 @@ streaming-system/
 │   └── storage/           # Conector MySQL
 ├── templates/             # Vistas HTML (Login, Admin, Dashboard)
 └── go.mod                 # Dependencias
-
+```
 
 
 
