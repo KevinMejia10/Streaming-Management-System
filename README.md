@@ -190,16 +190,15 @@ streaming-system/
 └── README.md              # Documentación
 
 ## 🔧 Configuración e Instalación
-1. Requisitos Previos
-Instalación de Go 1.18 o superior.
 
-Servidor MySQL activo.
+### 1. Requisitos Previos
+* Instalación de **Go 1.18** o superior.
+* Servidor **MySQL** activo.
 
-2. Configuración de la Base de Datos
-Crea la base de datos llamada BDD_Streaming. Asegúrate de que las tablas coincidan con las estructuras definidas en el paquete storage. Ajusta las credenciales en el archivo cmd/main.go dentro de la función main:
+### 2. Configuración de la Base de Datos
+Crea la base de datos llamada `BDD_Streaming`. Asegúrate de que las tablas coincidan con las estructuras definidas en el paquete `storage`. Ajusta las credenciales en el archivo `cmd/main.go` dentro de la función `main`:
 
-Go
-
+```go
 s, err := storage.NewMySQLStorage(storage.DBConfig{
     User:     "root",
     Password: "TU_PASSWORD_AQUÍ",
@@ -207,6 +206,16 @@ s, err := storage.NewMySQLStorage(storage.DBConfig{
     Port:     "3306",
     DBName:   "BDD_Streaming",
 })
+
+
+
+
+
+
+
+
+
+
 ## 3. Ejecución del Proyecto
 Abre una terminal en la raíz del proyecto y ejecuta los siguientes comandos:
 
