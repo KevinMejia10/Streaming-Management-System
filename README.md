@@ -230,7 +230,7 @@ Para gestionar el contenido (CRUD), inicia sesión con la cuenta de administrado
 
 Email: admin@stream.com
 
-Password: (La configurada en tu base de datos)
+Password: (Configurada en la base de datos)
 
 Nota: El sistema detecta automáticamente este correo y redirige al panel /admin.
 
