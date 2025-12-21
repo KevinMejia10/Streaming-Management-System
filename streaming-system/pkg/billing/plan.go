@@ -2,19 +2,19 @@ package billing
 
 // Plan representa un plan de suscripción disponible.
 type Plan struct {
-	id          string
-	nombre      string
-	precio      float32
-	mensualidad float32
+	id     string
+	nombre string
+	precio float64
+	costo  float64
 }
 
 // NuevoPlan es el constructor para Plan.
-func NuevoPlan(id, nombre string, precio, mensualidad float32) *Plan {
+func NuevoPlan(id, nombre string, precio, costo float64) *Plan {
 	return &Plan{
-		id:          id,
-		nombre:      nombre,
-		precio:      precio,
-		mensualidad: mensualidad,
+		id:     id,
+		nombre: nombre,
+		precio: precio,
+		costo:  costo,
 	}
 }
 
@@ -28,17 +28,7 @@ func (p *Plan) GetNombre() string {
 	return p.nombre
 }
 
-// GetPrecio devuelve el precio inicial.
-func (p *Plan) GetPrecio() float32 {
+// GetPrecio devuelve el precio del plan.
+func (p *Plan) GetPrecio() float64 {
 	return p.precio
-}
-
-// GetMensualidad devuelve el precio recurrente.
-func (p *Plan) GetMensualidad() float32 {
-	return p.mensualidad
-}
-
-// ActualizarPrecio simula la actualización de precio.
-func (p *Plan) ActualizarPrecio(nuevoPrecio float32) {
-	p.precio = nuevoPrecio
 }

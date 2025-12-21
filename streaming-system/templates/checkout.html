@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>StreamGo - Elige tu Plan</title>
+</head>
+<body class="bg-slate-900 text-white min-h-screen flex flex-col">
+    <nav class="p-6 border-b border-slate-800">
+        <h1 class="text-2xl font-bold text-red-600">STREAMGO</h1>
+    </nav>
+
+    <main class="flex-grow flex flex-col items-center justify-center p-6">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold mb-4">Selecciona el plan ideal para ti</h2>
+            <p class="text-slate-400">Puedes cambiar de plan o cancelar en cualquier momento.</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8 max-w-4xl w-full">
+            <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700 flex flex-col">
+                <h3 class="text-xl font-bold mb-2">Básico</h3>
+                <div class="text-3xl font-bold mb-6">$9.99<span class="text-sm text-slate-400 font-normal">/mes</span></div>
+                <ul class="space-y-4 mb-8 flex-grow text-slate-300">
+                    <li>✅ Acceso a todo el catálogo</li>
+                    <li>✅ Calidad SD (480p)</li>
+                    <li>✅ 1 Dispositivo a la vez</li>
+                </ul>
+                <form action="/checkout/buy" method="POST">
+                    <input type="hidden" name="plan_id" value="1">
+                    <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 rounded-lg font-bold transition">Seleccionar Básico</button>
+                </form>
+            </div>
+
+            <div class="bg-slate-800 p-8 rounded-2xl border-2 border-indigo-500 relative flex flex-col scale-105 shadow-2xl">
+                <span class="absolute -top-4 left-1/2 -translate-x-1/2 bg-indigo-500 text-white px-4 py-1 rounded-full text-xs font-bold uppercase">Más Popular</span>
+                <h3 class="text-xl font-bold mb-2">Premium</h3>
+                <div class="text-3xl font-bold mb-6">$19.99<span class="text-sm text-slate-400 font-normal">/mes</span></div>
+                <ul class="space-y-4 mb-8 flex-grow text-slate-300">
+                    <li>✅ Catálogo Completo + Estrenos</li>
+                    <li>✅ Calidad Ultra HD (4K) + HDR</li>
+                    <li>✅ 4 Dispositivos a la vez</li>
+                </ul>
+                <form action="/checkout/buy" method="POST">
+                    <input type="hidden" name="plan_id" value="2">
+                    <button type="submit" class="w-full py-3 bg-indigo-500 hover:bg-indigo-600 rounded-lg font-bold transition shadow-lg shadow-indigo-500/20">Seleccionar Premium</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

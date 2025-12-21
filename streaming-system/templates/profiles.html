@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>StreamGo - Perfiles</title>
+</head>
+<body class="bg-[#141414] text-white flex items-center justify-center min-h-screen font-sans">
+    <div class="text-center">
+        <h1 class="text-5xl font-medium mb-12">¿Quién está viendo?</h1>
+        
+        <div class="flex flex-wrap justify-center gap-10 mb-20">
+            {{range .Perfiles}}
+            <a href="/profiles/select?id={{.GetID}}" class="group flex flex-col items-center">
+                <div class="w-36 h-36 bg-indigo-700 rounded-md flex items-center justify-center text-6xl group-hover:ring-4 ring-gray-300 transition-all duration-300">
+                    👤
+                </div>
+                <span class="mt-4 text-gray-400 text-xl group-hover:text-white transition-colors">{{.GetNombre}}</span>
+            </a>
+            {{end}}
+
+            <button onclick="document.getElementById('profileModal').classList.remove('hidden')" class="group flex flex-col items-center">
+                <div class="w-36 h-36 border-2 border-dashed border-gray-600 rounded-md flex items-center justify-center text-6xl text-gray-600 group-hover:border-gray-300 group-hover:text-gray-300 transition-all duration-300">
+                    ＋
+                </div>
+                <span class="mt-4 text-gray-500 text-xl group-hover:text-gray-300">Añadir perfil</span>
+            </button>
+        </div>
+
+        <a href="/logout" class="px-6 py-2 border border-gray-600 text-gray-600 hover:text-white hover:border-white transition-all uppercase tracking-widest text-sm">Cerrar sesión</a>
+    </div>
+
+    <div id="profileModal" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center z-50">
+        <div class="bg-[#181818] p-10 rounded-lg w-full max-w-md">
+            <h2 class="text-3xl font-bold mb-6">Añadir perfil</h2>
+            <form action="/profiles/create" method="POST">
+                <input type="text" name="nombre" placeholder="Nombre" required 
+                    class="w-full p-3 bg-[#333] rounded border-none text-white focus:ring-2 ring-indigo-500 mb-8 outline-none text-lg">
+                <div class="flex gap-4">
+                    <button type="submit" class="flex-1 py-3 bg-white text-black font-bold text-lg hover:bg-gray-200 transition">Continuar</button>
+                    <button type="button" onclick="document.getElementById('profileModal').classList.add('hidden')" 
+                        class="flex-1 py-3 border border-gray-600 text-gray-600 font-bold text-lg hover:border-white hover:text-white transition">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

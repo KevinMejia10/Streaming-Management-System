@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>StreamGo - Login</title>
+</head>
+<body class="bg-slate-900 flex items-center justify-center h-screen">
+    <div class="bg-slate-800 p-8 rounded-xl shadow-2xl w-96 border border-slate-700">
+        <div class="flex flex-col items-center mb-6">
+            <span class="text-5xl mb-2">🎬</span>
+            <h1 class="text-3xl font-bold text-white text-center">StreamGo</h1>
+        </div>
+
+        <form action="/" method="POST" class="space-y-4">
+            <div>
+                <label class="text-slate-300 text-sm">Email</label>
+                <input type="email" name="email" required 
+                    class="w-full p-2 rounded bg-slate-700 text-white border border-slate-600 focus:border-indigo-500 outline-none transition">
+            </div>
+            <div>
+                <label class="text-slate-300 text-sm">Contraseña</label>
+                <input type="password" name="password" required 
+                    class="w-full p-2 rounded bg-slate-700 text-white border border-slate-600 focus:border-indigo-500 outline-none transition">
+            </div>
+            <button type="submit" 
+                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded transition shadow-lg transform active:scale-95">
+                Ingresar
+            </button>
+        </form>
+
+        <div class="mt-8 text-center border-t border-slate-700 pt-6">
+            <p class="text-slate-400 text-sm mb-3">¿No tienes una cuenta aún?</p>
+            <a href="/register" 
+                class="inline-block w-full border border-indigo-500 text-indigo-400 hover:bg-indigo-500 hover:text-white font-semibold py-2 rounded transition">
+                Crear cuenta nueva
+            </a>
+        </div>
+    </div>
+</body>
+</html>

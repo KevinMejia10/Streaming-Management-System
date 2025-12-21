@@ -6,6 +6,7 @@ import (
 )
 
 // ErrCredencialesInvalidas es un error personalizado para fallos de inicio de sesión.
+// ¡Declaración única para todo el paquete auth!
 var ErrCredencialesInvalidas = errors.New("credenciales inválidas")
 
 // Autenticacion representa la sesión de un usuario.
@@ -24,7 +25,6 @@ func (a *Autenticacion) GenerarToken(usuarioID string) string {
 
 // VerificarToken simula la verificación de la validez de un token.
 func (a *Autenticacion) VerificarToken() bool {
-	// [Lógica pendiente de implementar en el diagrama]
 	return time.Now().Before(a.expireDate) && a.token != ""
 }
 
@@ -39,7 +39,7 @@ func (a *Autenticacion) RevocarToken() {
 	a.expireDate = time.Time{}
 }
 
-// GetToken exporta el valor del token (solo para propósitos de simulación).
+// GetToken exporta el valor del token.
 func (a *Autenticacion) GetToken() string {
 	return a.token
 }

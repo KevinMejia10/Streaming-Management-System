@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>StreamGo Admin</title>
+</head>
+<body class="bg-slate-900 text-white min-h-screen font-sans">
+    <nav class="p-4 border-b border-slate-700 flex justify-between shadow-lg">
+        <h1 class="text-xl font-bold text-indigo-400">⚙️ PANEL ADMINISTRATIVO</h1>
+        <a href="/logout" class="bg-red-600 px-4 py-1 rounded text-sm font-bold">Cerrar Sesión</a>
+    </nav>
+
+    <main class="max-w-6xl mx-auto p-8">
+        <section class="bg-slate-800 p-6 rounded-lg mb-8 border border-slate-700">
+            <h2 class="font-bold mb-4 text-slate-400">Añadir Película</h2>
+            <form action="/admin/add" method="POST" class="flex gap-4">
+                <input type="text" name="id" placeholder="ID" required class="bg-slate-700 p-2 rounded w-24">
+                <input type="text" name="titulo" placeholder="Título" required class="bg-slate-700 p-2 rounded flex-1">
+                <input type="text" name="descripcion" placeholder="Descripción" class="bg-slate-700 p-2 rounded flex-1">
+                <button type="submit" class="bg-green-600 px-6 rounded font-bold hover:bg-green-500">＋ Guardar</button>
+            </form>
+        </section>
+
+        <div class="bg-slate-800 rounded-lg overflow-hidden border border-slate-700 shadow-2xl">
+            <table class="w-full text-left">
+                <thead class="bg-slate-700 text-indigo-300">
+                    <tr><th class="p-4">ID</th><th class="p-4">Título</th><th class="p-4">Descripción</th><th class="p-4 text-center">Acciones</th></tr>
+                </thead>
+                <tbody class="divide-y divide-slate-700">
+                    {{range .}}
+                    <tr class="hover:bg-slate-750 transition">
+                        <td class="p-4 font-mono text-indigo-400">{{.GetID}}</td>
+                        <td class="p-4 font-bold">{{.GetTitulo}}</td>
+                        <td class="p-4 text-sm text-slate-400 italic">{{.GetDescripcion}}</td>
+                        <td class="p-4 flex gap-2 justify-center">
+                            <button onclick="edit('{{.GetID}}', '{{.GetTitulo}}', '{{.GetDescripcion}}')" 
+                                class="bg-blue-600/20 text-blue-400 border border-blue-400/50 px-3 py-1 rounded text-xs hover:bg-blue-600 hover:text-white transition">
+                                Actualizar
+                            </button>
+                            <form action="/admin/delete" method="POST">
+                                <input type="hidden" name="id" value="{{.GetID}}">
+                                <button class="bg-red-600/20 text-red-400 border border-red-600/50 px-3 py-1 rounded text-xs hover:bg-red-600 hover:text-white transition">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <div id="modal" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center p-4 z-50">
+        <div class="bg-slate-800 p-8 rounded-xl border border-slate-700 w-full max-w-md">
+            <h2 class="text-xl font-bold mb-6 text-indigo-300">Editar Contenido</h2>
+            <form action="/admin/update" method="POST" class="space-y-4">
+                <input type="hidden" name="id" id="eid">
+                <input type="text" name="titulo" id="et" class="w-full bg-slate-700 p-2 rounded outline-none focus:ring-2 ring-indigo-500">
+                <textarea name="descripcion" id="ed" rows="4" class="w-full bg-slate-700 p-2 rounded outline-none focus:ring-2 ring-indigo-500"></textarea>
+                <div class="flex justify-end gap-3">
+                    <button type="button" onclick="closeM()" class="text-slate-400">Cancelar</button>
+                    <button type="submit" class="bg-indigo-600 px-6 py-2 rounded font-bold shadow-lg">Actualizar Datos</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function edit(id, t, d) { 
+            document.getElementById('eid').value = id; 
+            document.getElementById('et').value = t; 
+            document.getElementById('ed').value = d; 
+            document.getElementById('modal').classList.remove('hidden'); 
+        }
+        function closeM() { document.getElementById('modal').classList.add('hidden'); }
+    </script>
+</body>
+</html>
