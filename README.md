@@ -222,14 +222,29 @@ go mod tidy
 # Ejecutar la aplicación
 go run ./cmd/main.go
 ```
+El sistema se iniciará en: http://localhost:8080.
 
+## 🔒Acceso Administrativo
 
+Para gestionar el contenido (CRUD), inicia sesión con la cuenta de administrador:
 
+Email: admin@stream.com
 
+Password: (La configurada en tu base de datos)
 
+Nota: El sistema detecta automáticamente este correo y redirige al panel /admin.
 
-
-
+## 📂 Estructura del Proyecto
+streaming-system/
+├── cmd/
+│   └── main.go            # Servidor central y ruteo
+├── pkg/
+│   ├── auth/              # Usuarios y perfiles
+│   ├── billing/           # Planes y suscripciones
+│   ├── content/           # Modelos de catálogo
+│   └── storage/           # Conector MySQL
+├── templates/             # Vistas HTML (Login, Admin, Dashboard)
+└── go.mod                 # Dependencias
 
 
 
