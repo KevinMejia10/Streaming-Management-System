@@ -142,14 +142,6 @@ MySQL es la base elegida por:
 ![Diagrama de clases - Streaming](https://github.com/user-attachments/assets/8a547339-b2ba-4fce-8a68-d5ee16aae42a)
 
 
-
-
-# 🎬 StreamGo - Plataforma de Streaming Educativa
-
-**StreamGo** es una aplicación web de streaming de alto rendimiento desarrollada en **Go (Golang)**. El proyecto implementa una arquitectura limpia, persistencia de datos en **MySQL** y una interfaz de usuario moderna y responsiva utilizando **TailwindCSS**. Permite la gestión integral de usuarios, perfiles, planes de suscripción y un catálogo de contenidos mediante un potente módulo administrativo.
-
----
-
 ## 🚀 Características Principales
 
 ### 👤 Gestión de Usuarios y Perfiles
