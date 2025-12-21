@@ -197,7 +197,7 @@ streaming-system/
 ├── go.mod                 # Dependencias del proyecto
 └── README.md              # Documentación
 
-🔧 Configuración e Instalación
+## 🔧 Configuración e Instalación
 1. Requisitos Previos
 Instalación de Go 1.18 o superior.
 
@@ -215,7 +215,7 @@ s, err := storage.NewMySQLStorage(storage.DBConfig{
     Port:     "3306",
     DBName:   "BDD_Streaming",
 })
-3. Ejecución del Proyecto
+## 3. Ejecución del Proyecto
 Abre una terminal en la raíz del proyecto y ejecuta los siguientes comandos:
 
 Bash
