@@ -31,9 +31,12 @@ func main() {
 		User: "root", Password: "Kevin1994Alex", Host: "localhost", Port: "3306", DBName: "BDD_Streaming",
 	})
 	if err != nil {
-		fmt.Printf("❌ DB Error: %v\n", err)
+		fmt.Printf("❌ FATAL: No se pudo conectar a la DB: %v\n", err)
 		os.Exit(1)
 	}
+
+	fmt.Println("✅ Conexión exitosa a la base de datos MySQL")
+
 	dbStore = s
 	defer s.DB.Close()
 
@@ -189,9 +192,12 @@ func handleAdmin(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleAdminAdd(w http.ResponseWriter, r *http.Request) {
-	n := content.NuevaPelicula(r.FormValue("id"), r.FormValue("titulo"), r.FormValue("descripcion"), "General", "N/A", "N/A", 0)
+	n := content.NuevaPelicula(r.FormValue("id"), r.FormValue("titulo"), r.FormValue("descripcion"), "N/A", "N/A", "N/A", 0)
 	gestor.InsertarContenido(n)
-	dbStore.SaveContent(n)
+	err := dbStore.SaveContent(n)
+	if err != nil {
+		fmt.Printf("❌ Error al guardar en DB: %v\n", err)
+	}
 	http.Redirect(w, r, "/admin", http.StatusSeeOther)
 }
 
